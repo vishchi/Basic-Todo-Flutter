@@ -1,0 +1,5 @@
+input InsertTodoInput {
+	title: String!
+	description: String
+	category: String
+}

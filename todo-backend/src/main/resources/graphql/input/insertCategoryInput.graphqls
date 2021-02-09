@@ -1,0 +1,3 @@
+input InsertCategoryInput {
+	name: String!
+}

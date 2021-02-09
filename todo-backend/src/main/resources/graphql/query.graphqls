@@ -1,0 +1,18 @@
+type Query {
+	todos: [Todo]
+	categories: [Category]
+	todo(id: Int!): Todo
+	category(id: Int!): Category
+}
+
+type Todo {
+	id: Int!
+	title: String!
+	description: String
+	category: String
+}
+
+type Category {
+	id: Int!
+	name: String!
+}
