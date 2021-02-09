@@ -12,7 +12,6 @@ class Todo {
     mapping['title'] = title;
     mapping['description'] = description;
     mapping['category'] = category;
-    mapping['todoDate'] = todoDate;
     mapping['isFinished'] = isFinished;
 
     return mapping;
