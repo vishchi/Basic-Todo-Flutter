@@ -21,9 +21,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
-
-
 # The following section is specific to Flutter.
 flutter:
 
