@@ -1,8 +1,11 @@
 type Query {
 	todos: [Todo]
 	categories: [Category]
+	
 	todo(id: Int!): Todo
 	category(id: Int!): Category
+	
+	todosByCat(category: String!): [Todo]
 }
 
 type Todo {

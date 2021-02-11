@@ -35,6 +35,16 @@ public class QueryResolver implements GraphQLQueryResolver{
 		return todo;
 	}
 	
+	public List<Todo> todosByCat(String category) {
+		System.out.println("Fetching todo by cat");
+		List<Todo> todos = todoRepository.findByCategory(category);
+		for(Todo todo: todos) {
+			System.out.println(todo);
+		}
+		return todos;
+		
+	}
+	
 	public List<Category> categories() {
 		System.out.println("Fetching all Categories");
 		List<Category> categories = categoryRepository.findAll();

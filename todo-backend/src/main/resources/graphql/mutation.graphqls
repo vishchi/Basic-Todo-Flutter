@@ -3,6 +3,9 @@ type Mutation {
 	insertTodo(input: InsertTodoInput): Todo!
 	insertCategory(input: InsertCategoryInput): Category!
 	
+	updateTodo(id: Int!, input: InsertTodoInput!): Todo!
+	updateCategory(id: Int!, input: InsertCategoryInput!): Category!
+	
 	deleteTodo(id: Int!): Todo
 	deleteCategory(id: Int!): Category
 	
