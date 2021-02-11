@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertodolistsqfliteapp/helpers/drawer_navigation.dart';
 import 'package:fluttertodolistsqfliteapp/models/todo.dart';
 import 'package:fluttertodolistsqfliteapp/screens/todo_screen.dart';
-import 'package:fluttertodolistsqfliteapp/services/todo_service.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/todo_queries.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,8 +10,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TodoService _todoService;
-
   List<Todo> _todoList = <Todo>[];
 
   @override
@@ -21,10 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getAllTodos() async {
-    _todoService = TodoService();
     _todoList = <Todo>[];
 
-    var todos = await _todoService.readTodos();
+    // var todos = await _todoService.readTodos();
+    var todos = await getTodos();
 
     todos.forEach((todo) {
       setState(() {
@@ -33,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
         model.title = todo['title'];
         model.description = todo['description'];
         model.category = todo['category'];
-        model.isFinished = todo['isFinished'];
         _todoList.add(model);
       });
     });

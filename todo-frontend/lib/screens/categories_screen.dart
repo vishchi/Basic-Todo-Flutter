@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertodolistsqfliteapp/models/category.dart';
 import 'package:fluttertodolistsqfliteapp/screens/home_screen.dart';
-import 'package:fluttertodolistsqfliteapp/services/category_service.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/category_queries.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/category_mutations.dart';
 
 class CategoriesScreen extends StatefulWidget {
   @override
@@ -11,17 +12,14 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   var _categoryNameController = TextEditingController();
-  var _categoryDescriptionController = TextEditingController();
 
   var _category = Category();
-  var _categoryService = CategoryService();
 
   List<Category> _categoryList = <Category>[];
 
   var category;
 
   var _editCategoryNameController = TextEditingController();
-  var _editCategoryDescriptionController = TextEditingController();
 
   @override
   void initState() {
@@ -33,12 +31,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   getAllCategories() async {
     _categoryList = <Category>[];
-    var categories = await _categoryService.readCategories();
+    // var categories = await _categoryService.readCategories();
+    var categories = await getCategories();
     categories.forEach((category) {
       setState(() {
         var categoryModel = Category();
         categoryModel.name = category['name'];
-        categoryModel.description = category['description'];
         categoryModel.id = category['id'];
         _categoryList.add(categoryModel);
       });
@@ -46,11 +44,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   _editCategory(BuildContext context, categoryId) async {
-    category = await _categoryService.readCategoryById(categoryId);
+    // category = await _categoryService.readCategoryById(categoryId);
+    category = await getCategory(categoryId);
     setState(() {
-      _editCategoryNameController.text = category[0]['name'] ?? 'No Name';
-      _editCategoryDescriptionController.text =
-          category[0]['description'] ?? 'No Description';
+      _editCategoryNameController.text = category['name'] ?? 'No Name';
     });
     _editFormDialog(context);
   }
@@ -74,8 +71,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 onPressed: () async {
                   _category.name = _categoryNameController.text;
 
-                  var result = await _categoryService.saveCategory(_category);
-                  if (result > 0) {
+                  // var result = await _categoryService.saveCategory(_category);
+                  var result = await insertCategory(_category);
+                  if (!result.isEmpty) {
                     print(result);
                     Navigator.pop(context);
                     getAllCategories();
@@ -117,11 +115,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               FlatButton(
                 color: Colors.blue,
                 onPressed: () async {
-                  _category.id = category[0]['id'];
+                  _category.id = category['id'];
                   _category.name = _editCategoryNameController.text;
 
-                  var result = await _categoryService.updateCategory(_category);
-                  if (result > 0) {
+                  // var result = await _categoryService.updateCategory(_category);
+                  var result = await updateCategory(_category); // TODO update
+                  if (!result.isEmpty) {
                     Navigator.pop(context);
                     getAllCategories();
                     _showSuccessSnackBar(Text('Updated'));
@@ -163,9 +162,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               FlatButton(
                 color: Colors.red,
                 onPressed: () async {
-                  var result =
-                      await _categoryService.deleteCategory(categoryId);
-                  if (result > 0) {
+                  // var result = await _categoryService.deleteCategory(categoryId);
+                  var result = await deleteCategory(categoryId);
+                  if (!result.isEmpty) {
                     Navigator.pop(context);
                     getAllCategories();
                     _showSuccessSnackBar(Text('Deleted'));

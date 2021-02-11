@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/todo_queries.dart';
 import 'package:fluttertodolistsqfliteapp/models/todo.dart';
-import 'package:fluttertodolistsqfliteapp/services/todo_service.dart';
 
 class TodosByCategory extends StatefulWidget {
   final String category;
@@ -13,7 +13,6 @@ class TodosByCategory extends StatefulWidget {
 
 class _TodosByCategoryState extends State<TodosByCategory> {
   List<Todo> _todoList = <Todo>[];
-  TodoService _todoService = TodoService();
 
   @override
   void initState() {
@@ -22,7 +21,8 @@ class _TodosByCategoryState extends State<TodosByCategory> {
   }
 
   getTodosByCategories() async {
-    var todos = await _todoService.readTodosByCategory(this.widget.category);
+    // var todos = await _todoService.readTodosByCategory(this.widget.category);
+    var todos = await getTodosByCat(this.widget.category); 
     todos.forEach((todo) {
       setState(() {
         var model = Todo();

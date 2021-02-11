@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertodolistsqfliteapp/screens/categories_screen.dart';
 import 'package:fluttertodolistsqfliteapp/screens/home_screen.dart';
 import 'package:fluttertodolistsqfliteapp/screens/todos_by_category.dart';
-import 'package:fluttertodolistsqfliteapp/services/category_service.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/category_queries.dart';
 
 class DrawerNavigaton extends StatefulWidget {
   @override
@@ -12,8 +12,6 @@ class DrawerNavigaton extends StatefulWidget {
 class _DrawerNavigatonState extends State<DrawerNavigaton> {
   List<Widget> _categoryList = <Widget>[];
 
-  CategoryService _categoryService = CategoryService();
-
   @override
   initState() {
     super.initState();
@@ -21,7 +19,8 @@ class _DrawerNavigatonState extends State<DrawerNavigaton> {
   }
 
   getAllCategories() async {
-    var categories = await _categoryService.readCategories();
+    // var categories = await _categoryService.readCategories();
+    var categories = await getCategories();
 
     categories.forEach((category) {
       setState(() {

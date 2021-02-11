@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertodolistsqfliteapp/models/todo.dart';
-import 'package:fluttertodolistsqfliteapp/services/category_service.dart';
-import 'package:fluttertodolistsqfliteapp/services/todo_service.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/todo_mutations.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/category_queries.dart';
 
 class TodoScreen extends StatefulWidget {
   @override
@@ -26,8 +26,8 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 
   _loadCategories() async {
-    var _categoryService = CategoryService();
-    var categories = await _categoryService.readCategories();
+    // var categories = await _categoryService.readCategories();
+    var categories = await getCategories();
     categories.forEach((category) {
       setState(() {
         _categories.add(DropdownMenuItem(
@@ -86,13 +86,12 @@ class _TodoScreenState extends State<TodoScreen> {
 
                 todoObject.title = _todoTitleController.text;
                 todoObject.description = _todoDescriptionController.text;
-                todoObject.isFinished = 0;
                 todoObject.category = _selectedValue.toString();
 
-                var _todoService = TodoService();
-                var result = await _todoService.saveTodo(todoObject);
-
-                if (result > 0) {
+                // var result = await _todoService.saveTodo(todoObject);
+                var result = await insertTodo(todoObject);
+                // print(result);
+                if (!result.isEmpty) {
                   _showSuccessSnackBar(Text('Created'));
                 }
 
