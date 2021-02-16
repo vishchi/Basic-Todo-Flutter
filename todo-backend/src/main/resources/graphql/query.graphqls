@@ -1,4 +1,5 @@
 type Query {
+	user(input: InsertUserInput!): SignInUser
 	todos: [Todo]
 	categories: [Category]
 	
@@ -8,14 +9,27 @@ type Query {
 	todosByCat(category: String!): [Todo]
 }
 
+type Users {
+	id: Int!
+	email: String!
+	password: String!
+}
+
+type SignInUser {
+	email: String!
+	token: String!
+}
+
 type Todo {
 	id: Int!
 	title: String!
 	description: String
-	category: String
+	userId: Int!
+	category: Category
 }
 
 type Category {
 	id: Int!
 	name: String!
+	userId: Int!
 }

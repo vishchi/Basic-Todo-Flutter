@@ -1,0 +1,14 @@
+input InsertCategoryInput {
+	name: String!
+}
+
+input InsertTodoInput {
+	title: String!
+	description: String
+	category: String
+}
+
+input InsertUserInput {
+	email: String!
+	password: String!
+}

@@ -4,23 +4,38 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"userId", "title"}, name = "uniqueTodoPerUser"),
+		@UniqueConstraint(columnNames = {"catId", "title"}, name = "uniqueTodoPerCat")
+})
 public class Todo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String title;
 	private String description;
-	private String category;
+	@ManyToOne
+	@JoinColumn(name = "userId", nullable = true)
+	private User user;
+	@ManyToOne
+	@JoinColumn(name = "catId", nullable = true)
+	private Category category;
 
 	public Todo() {
 	}
 
-	public Todo(Integer id, String title, String description, String category) {
+	public Todo(Integer id, String title, String description, User user, Category category) {
+		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
+		this.user = user;
 		this.category = category;
 	}
 
@@ -48,12 +63,16 @@ public class Todo {
 		this.title = title;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

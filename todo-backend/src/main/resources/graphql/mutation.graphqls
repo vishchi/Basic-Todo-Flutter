@@ -1,5 +1,6 @@
 type Mutation {
 	
+	insertUser(input: InsertUserInput): SignInUser!
 	insertTodo(input: InsertTodoInput): Todo!
 	insertCategory(input: InsertCategoryInput): Category!
 	
