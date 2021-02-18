@@ -24,9 +24,9 @@ public class User {
 	private Integer id;
 	private String email;
 	private String password;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userC", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = CascadeType.REMOVE)
 	private Set<Category> categories = new HashSet<Category>();
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userT", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = CascadeType.REMOVE)
 	private Set<Todo> todos = new HashSet<Todo>();
 
 	public User() {
@@ -62,6 +62,12 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", email=" + email + ", password=" + password + ", categories=" + categories
+				+ ", todos=" + todos + "]";
 	}
 
 }

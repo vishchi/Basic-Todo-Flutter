@@ -16,27 +16,26 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"name", "userId"}, name = "uniqueCatPerUser")
-})
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "userId" }, name = "uniqueCatPerUser") })
 public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
 	@ManyToOne
-	@JoinColumn(name="userId", nullable = false)
+	@JoinColumn(name = "userId", nullable = false)
 	private User user;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "catI", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = CascadeType.REMOVE)
 	private Set<Todo> todos = new HashSet<Todo>();
 
 	public Category() {
 	}
 
-	public Category(Integer id, String name, String description) {
+	public Category(Integer id, String name, User user) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.user = user;
 	}
 
 	public Integer getId() {
@@ -55,9 +54,17 @@ public class Category {
 		this.name = name;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Integer getUserId() {
+		return user.getId();
+	}
+
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name  + "]";
+		return "Category [id=" + id + ", name=" + name + "]";
 	}
 
 }

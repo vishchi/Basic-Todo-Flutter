@@ -21,7 +21,7 @@ public class Todo {
 	private String title;
 	private String description;
 	@ManyToOne
-	@JoinColumn(name = "userId", nullable = true)
+	@JoinColumn(name = "userId", nullable = false)
 	private User user;
 	@ManyToOne
 	@JoinColumn(name = "catId", nullable = true)
@@ -73,6 +73,10 @@ public class Todo {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public Integer getUserId() {
+		return user.getId();
 	}
 
 	@Override

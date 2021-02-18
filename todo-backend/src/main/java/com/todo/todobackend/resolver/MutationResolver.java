@@ -1,6 +1,8 @@
 package com.todo.todobackend.resolver;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.todo.todobackend.entity.Category;
@@ -10,10 +12,11 @@ import com.todo.todobackend.entity.input.InsertCategoryInput;
 import com.todo.todobackend.entity.input.InsertTodoInput;
 import com.todo.todobackend.entity.input.InsertUserInput;
 import com.todo.todobackend.entity.output.SignInUser;
-import com.todo.todobackend.repository.CategoryRepository;
-import com.todo.todobackend.repository.TodoRepository;
-import com.todo.todobackend.repository.UserRepository;
 import com.todo.todobackend.security.annotations.Unsecured;
+import com.todo.todobackend.services.CategoryService;
+import com.todo.todobackend.services.TodoService;
+import com.todo.todobackend.services.UserService;
+import com.todo.todobackend.utility.Jwt;
 
 import graphql.kickstart.tools.GraphQLMutationResolver;
 
@@ -21,90 +24,74 @@ import graphql.kickstart.tools.GraphQLMutationResolver;
 public class MutationResolver implements GraphQLMutationResolver {
 
 	@Autowired
-	TodoRepository todoRepository;
+	private TodoService todoService;
 	@Autowired
-	CategoryRepository categoryRepository;
+	private CategoryService categoryService;
 	@Autowired
-	UserRepository userRepository;
+	private UserService userService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private Jwt jwt;
 
 	// User Mutations
 	@Unsecured
 	public SignInUser insertUser(InsertUserInput input) {
 		System.out.println("Inserting User");
-		User user = userRepository.findByEmail(input.getEmail());
-		if (user == null) {
-			user = new User();
-			user.setEmail(input.getEmail());
-			user.setPassword(input.getPassword()); // TODO hash first
-			userRepository.save(user);
-			String token = ""; // TODO use JWT
-			SignInUser output = new SignInUser(input.getEmail(), token);
-			return output;
+		User user = userService.insertUser(input.getEmail(), passwordEncoder.encode(input.getPassword()));
+		if(user == null) {
+			// TODO throw exception
 		}
-		// TODO throw "User exists" error
-		return null;
-
+		String token = jwt.generateToken(user); 
+		SignInUser output = new SignInUser(user.getEmail(), token);
+		return output;
 	}
 
 	// Insert Mutations
 	public Todo insertTodo(InsertTodoInput input) {
 		System.out.println("Inserting todo");
-//		Category category = categoryRepository.findByName
-		Todo todo = new Todo();
-		todo.setTitle(input.getTitle());
-		todo.setDescription(input.getDescription());
-		todoRepository.save(todo);
-		System.out.println(todo);
-		return todo;
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Category category = categoryService.getCategoryByName(input.getCategory(), user.getId());
+		return todoService.insertTodo(input.getTitle(), input.getDescription(), category, user);
 	}
 
 	public Category insertCategory(InsertCategoryInput input) {
 		System.out.println("Inserting category");
-		Category category = new Category();
-		category.setName(input.getName());
-		categoryRepository.save(category);
-		System.out.println(category);
-		return category;
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return categoryService.insertCategory(input.getName(), user);
 	}
 
 	// Update Mutations
 	public Todo updateTodo(Integer id, InsertTodoInput input) {
 		System.out.println("Updating todo");
-		Todo todo = new Todo();
-		todo.setId(id);
-		todo.setTitle(input.getTitle());
-		todo.setDescription(input.getDescription());
-//		todo.setCategory(input.getCategory());
-//		int result = todoRepository.updateTodo(todo.getId(), todo.getTitle(), todo.getDescription(), todo.getCategory());
-//		System.out.println(result);
-		return todo;
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Category category = categoryService.getCategoryByName(input.getCategory(), user.getId());
+		Todo todo = todoService.getTodo(user.getId(), id);
+		return todoService.updateTodo(todo, input.getTitle(), input.getDescription(), category);
 
 	}
 
 	public Category updateCategory(Integer id, InsertCategoryInput input) {
 		System.out.println("Updating category");
-		Category category = new Category();
-		category.setName(input.getName());
-		category.setId(id);
-//		int result = categoryRepository.updateCategory(category.getId(), category.getName());
-//		System.out.println(result);
-		return category;
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Category category = categoryService.getCategory(user.getId(), id);
+		return categoryService.updateCategory(category, input.getName());
 	}
 
 	// delete Mutations
 	public Todo deleteTodo(Integer id) {
 		System.out.println("deleting todo");
-		Todo todo = todoRepository.findById(id).orElse(null);
-		System.out.println(todo);
-		todoRepository.deleteById(id);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Todo todo = todoService.getTodo(user.getId(), id);
+		todoService.deleteTodo(todo);
 		return todo;
 	}
 
 	public Category deleteCategory(Integer id) {
 		System.out.println("deleting category");
-		Category category = categoryRepository.findById(id).orElse(null);
-		System.out.println(category);
-		categoryRepository.deleteById(id);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Category category = categoryService.getCategory(user.getId(), id);
+		categoryService.deleteCategory(category);
 		return category;
 	}
 }
