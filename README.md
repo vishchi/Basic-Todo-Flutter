@@ -1,6 +1,6 @@
 # Flutter To-Do List App
 
-A basic Flutter todolist sqflite application.
+A basic Flutter todolist GraphQL application.
 
 ## How to use this?
 
