@@ -35,7 +35,7 @@ public class Jwt {
 		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
 	}
 
-	private Boolean isTokenExpired(String token) {
+	public Boolean isTokenExpired(String token) {
 		return extractExpiration(token).before(new Date());
 	}
 
@@ -49,11 +49,6 @@ public class Jwt {
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 ))
 				.signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
-	}
-
-	public Boolean validateToken(String token, String email) {
-		final String username = extractUsername(token);
-        return (username.equals(email) && !isTokenExpired(token));
 	}
 
 }

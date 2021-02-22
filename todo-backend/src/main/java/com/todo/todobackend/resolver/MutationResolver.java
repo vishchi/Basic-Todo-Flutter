@@ -58,6 +58,7 @@ public class MutationResolver implements GraphQLMutationResolver {
 	public Category insertCategory(InsertCategoryInput input) {
 		System.out.println("Inserting category");
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(user);
 		return categoryService.insertCategory(input.getName(), user);
 	}
 

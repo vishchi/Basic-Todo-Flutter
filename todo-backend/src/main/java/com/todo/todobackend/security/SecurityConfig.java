@@ -7,9 +7,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.switchuser.SwitchUserFilter;
 
 import com.todo.todobackend.security.filters.JwtRequestFilter;
 
@@ -22,8 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 //		http.authorizeRequests().antMatchers("/graphql").permitAll().antMatchers("/playground").permitAll().antMatchers("/vendor/**").permitAll().anyRequest().authenticated();
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/graphql").permitAll().anyRequest().permitAll();
-		http.addFilterBefore(jwtReqFilter, UsernamePasswordAuthenticationFilter.class);
+		http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/graphql").permitAll().anyRequest().permitAll();
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilterAfter(jwtReqFilter, SwitchUserFilter.class);
 	}
 	
 	@Bean

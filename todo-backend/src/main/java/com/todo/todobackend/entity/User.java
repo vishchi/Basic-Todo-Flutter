@@ -24,9 +24,9 @@ public class User {
 	private Integer id;
 	private String email;
 	private String password;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Category> categories = new HashSet<Category>();
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	private Set<Todo> todos = new HashSet<Todo>();
 
 	public User() {

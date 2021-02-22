@@ -25,7 +25,7 @@ public class Category {
 	@ManyToOne
 	@JoinColumn(name = "userId", nullable = false)
 	private User user;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<Todo> todos = new HashSet<Todo>();
 
 	public Category() {

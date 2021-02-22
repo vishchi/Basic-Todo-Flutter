@@ -22,6 +22,9 @@ public class SecurityGraphQLAspect {
 		if (SecurityContextHolder.getContext() != null
 				&& SecurityContextHolder.getContext().getAuthentication() != null) {
 			Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
+			System.out.printf("AuthToken: %s\n", authToken.getPrincipal() );
+			System.out.print("Is authenticated: ");
+			System.out.println(authToken.isAuthenticated());
 			User user = (User) authToken.getPrincipal();
 			if (user != null) {
 				return;

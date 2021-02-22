@@ -31,20 +31,27 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 		final String authorization = request.getHeader("Authorization");
 		String email = null;
 		String token = null;
-		if(authorization != null && authorization.startsWith("Bearer ")) {
+		UsernamePasswordAuthenticationToken authToken = null;
+		if (authorization != null && authorization.startsWith("Bearer ")) {
 			token = authorization.substring(7);
-			email = jwt.extractUsername(token);
-		}
-		if(email != null) {
-			User user = userService.getUser(email);
-			if( user != null && jwt.validateToken(token, user.getEmail())) {
-				UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, null);
-				SecurityContextHolder.getContext().setAuthentication(authToken);
-				System.out.println("Context set");
-				System.out.println(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+			if(!jwt.isTokenExpired(token)) {				
+				email = jwt.extractUsername(token);
 			}
-			
 		}
+		if (email != null) {
+			User user = userService.getUser(email);
+			System.out.println(user);
+			if (user != null) {
+				authToken = new UsernamePasswordAuthenticationToken(user, null, null);
+			}
+
+		}
+		if (authToken == null) {
+			authToken = new UsernamePasswordAuthenticationToken(null, null);
+		}
+		SecurityContextHolder.getContext().setAuthentication(authToken);
+		System.out.println("Context set");
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
 		filterChain.doFilter(request, response);
 
 	}
