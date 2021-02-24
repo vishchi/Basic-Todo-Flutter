@@ -3,6 +3,10 @@ import 'package:fluttertodolistsqfliteapp/screens/categories_screen.dart';
 import 'package:fluttertodolistsqfliteapp/screens/home_screen.dart';
 import 'package:fluttertodolistsqfliteapp/screens/todos_by_category.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/category_queries.dart';
+import 'package:fluttertodolistsqfliteapp/screens/login.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
+
+import '../screens/login.dart';
 
 class DrawerNavigaton extends StatefulWidget {
   final String userEmail;
@@ -74,6 +78,22 @@ class _DrawerNavigatonState extends State<DrawerNavigaton> {
             Column(
               children: _categoryList,
             ),
+            Divider(),
+            FlatButton(
+              textColor: Colors.red,
+            onPressed: () async {
+              GQLClient.isToken = false;
+              GQLClient.token = "";
+              Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => LoginPage(),
+              ),
+              (route) => false,
+              );
+            },
+            child: Text("LOGOUT"),
+        ),
           ],
         ),
       ),

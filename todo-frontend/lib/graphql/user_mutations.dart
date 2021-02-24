@@ -30,7 +30,7 @@ Future<dynamic> insertUser(dynamic object) async {
     print(result.exception.toString());
   }
 
-  final dynamic user = result.data['inserUser'] as dynamic;
+  final dynamic user = result.data['insertUser'] as dynamic;
   print(user);
   return user;
 }

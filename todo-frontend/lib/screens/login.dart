@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               print("Email: " + email);
               print("Password: "+ password);
               var result = await loginUser(userObject);
-              if(!result.isEmpty) {
+              if(result != null && !result.isEmpty) {
                 print("result: " + result.toString());
                 GQLClient.isToken = true;
                 GQLClient.token = result['token'];

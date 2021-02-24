@@ -107,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
               print("Email: " + email);
               print("Password: "+ password);
               var result = await insertUser(userObject);
-              if(!result.isEmpty) {
+              if(result != null && !result.isEmpty) {
                 print("result: " + result.toString());
                 GQLClient.isToken = true;
                 GQLClient.token = result['token'];
