@@ -5,11 +5,15 @@ import 'package:fluttertodolistsqfliteapp/screens/todos_by_category.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/category_queries.dart';
 
 class DrawerNavigaton extends StatefulWidget {
+  final String userEmail;
+  DrawerNavigaton({Key key, @required this.userEmail});
   @override
-  _DrawerNavigatonState createState() => _DrawerNavigatonState();
+  _DrawerNavigatonState createState() => _DrawerNavigatonState(userEmail: this.userEmail);
 }
 
 class _DrawerNavigatonState extends State<DrawerNavigaton> {
+  final String userEmail;
+  _DrawerNavigatonState({@required this.userEmail});
   List<Widget> _categoryList = <Widget>[];
 
   @override
@@ -48,23 +52,23 @@ class _DrawerNavigatonState extends State<DrawerNavigaton> {
             UserAccountsDrawerHeader(
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage(
-                    'https://images.ctfassets.net/hrltx12pl8hq/5hb9s8fTpw4Pk7fEm8Hdfs/d7c5ae85aad44fb334bcde8268135774/flowers-images-card.jpg?fit=fill&w=368&h=207'),
+                    'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png'),
               ),
-              accountName: Text('Vishal Chincholi'),
-              accountEmail: Text('vishalsc1999@gmail.com'),
+              accountName: Text(""),
+              accountEmail: Text(userEmail) ,
               decoration: BoxDecoration(color: Colors.blueGrey[900]),
             ),
             ListTile(
               leading: Icon(Icons.home),
               title: Text('Home'),
               onTap: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => HomeScreen())),
+                  .push(MaterialPageRoute(builder: (context) => HomeScreen(userEmail: userEmail))),
             ),
             ListTile(
               leading: Icon(Icons.view_list),
               title: Text('Categories'),
               onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CategoriesScreen())),
+                  MaterialPageRoute(builder: (context) => CategoriesScreen(userEmail: userEmail))),
             ),
             Divider(),
             Column(

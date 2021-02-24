@@ -5,12 +5,16 @@ import 'package:fluttertodolistsqfliteapp/screens/todo_screen.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/todo_queries.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String userEmail;
+  HomeScreen({Key key, @required this.userEmail }): super(key: key);
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState(userEmail: userEmail);
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Todo> _todoList = <Todo>[];
+  final String userEmail;
+  _HomeScreenState({@required this.userEmail });
 
   @override
   initState() {
@@ -30,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         model.id = todo['id'];
         model.title = todo['title'];
         model.description = todo['description'];
-        model.category = todo['category'];
+        model.category = todo['category']['name'];
         _todoList.add(model);
       });
     });
@@ -45,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
       ),
       backgroundColor: Colors.blueGrey,
-      drawer: DrawerNavigaton(),
+      drawer: DrawerNavigaton(userEmail: userEmail),
       body: ListView.builder(
           itemCount: _todoList.length,
           itemBuilder: (context, index) {

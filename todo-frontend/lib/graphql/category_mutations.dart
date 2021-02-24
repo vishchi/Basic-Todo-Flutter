@@ -2,7 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
 
 Future<dynamic> insertCategory(dynamic object) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final MutationOptions options = MutationOptions(
     document: gql(
@@ -33,7 +33,7 @@ Future<dynamic> insertCategory(dynamic object) async {
 }
 
 Future<dynamic> updateCategory(dynamic object) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final MutationOptions options = MutationOptions(
     document: gql(
@@ -65,7 +65,7 @@ Future<dynamic> updateCategory(dynamic object) async {
 }
 
 Future<dynamic> deleteCategory(int id) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final MutationOptions options = MutationOptions(
     document: gql(

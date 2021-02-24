@@ -2,7 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
 
 Future<List<dynamic>> getCategories() async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final QueryOptions options = QueryOptions(
     document: gql(
@@ -28,7 +28,7 @@ Future<List<dynamic>> getCategories() async {
 }
 
 Future<dynamic> getCategory(int id) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final QueryOptions options = QueryOptions(
     document: gql(

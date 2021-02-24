@@ -2,7 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
 
 Future<List<dynamic>> getTodos() async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final QueryOptions options = QueryOptions(
     document: gql(
@@ -11,8 +11,9 @@ Future<List<dynamic>> getTodos() async {
           todos {
             id
             title
-            description
-            category
+            category {
+              name
+            }
           }
         }
       ''',
@@ -30,7 +31,7 @@ Future<List<dynamic>> getTodos() async {
 }
 
 Future<dynamic> getTodo(int id) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final QueryOptions options = QueryOptions(
     document: gql(
@@ -39,8 +40,9 @@ Future<dynamic> getTodo(int id) async {
           todo(id: $id) {
             id
             title
-            description
-            category
+            category {
+              name
+            }
           }
         }
       ''',
@@ -60,7 +62,7 @@ Future<dynamic> getTodo(int id) async {
 }
 
 Future<dynamic> getTodosByCat(String category) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final QueryOptions options = QueryOptions(
     document: gql(
@@ -70,7 +72,9 @@ Future<dynamic> getTodosByCat(String category) async {
             id
             title
             description
-            category
+            category {
+              name
+            }
           }
         }
       ''',

@@ -2,7 +2,7 @@ import 'package:graphql/client.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
 
 Future<dynamic> insertTodo(dynamic object) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
   print("Inside InsertTodo");
   print(object);
 
@@ -13,8 +13,9 @@ Future<dynamic> insertTodo(dynamic object) async {
           insertTodo(input: $input) {
             id
             title
-            description
-            category
+            category {
+              name
+            }
           }
         }
       ''',
@@ -39,7 +40,7 @@ Future<dynamic> insertTodo(dynamic object) async {
 }
 
 Future<dynamic> deleteTodo(int id) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
 
   final MutationOptions options = MutationOptions(
     document: gql(
@@ -68,7 +69,7 @@ Future<dynamic> deleteTodo(int id) async {
 
 
 Future<dynamic> updateTodo(dynamic object) async {
-  final GraphQLClient _client = getGraphQLClient();
+  final GraphQLClient _client = GQLClient.getGraphQLClientAuth();
   print("Inside InsertTodo");
   print(object);
 
@@ -79,8 +80,9 @@ Future<dynamic> updateTodo(dynamic object) async {
           updateTodo(id: $id, input: $input) {
             id
             title
-            description
-            category
+            category {
+              name
+            }
           }
         }
       ''',

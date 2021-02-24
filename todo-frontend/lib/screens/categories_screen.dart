@@ -6,11 +6,15 @@ import 'package:fluttertodolistsqfliteapp/graphql/category_queries.dart';
 import 'package:fluttertodolistsqfliteapp/graphql/category_mutations.dart';
 
 class CategoriesScreen extends StatefulWidget {
+  final String userEmail;
+  CategoriesScreen({Key key, @required this.userEmail}): super(key: key);
   @override
-  _CategoriesScreenState createState() => _CategoriesScreenState();
+  _CategoriesScreenState createState() => _CategoriesScreenState(userEmail: userEmail);
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
+  final String userEmail;
+  _CategoriesScreenState({@required this.userEmail});
   var _categoryNameController = TextEditingController();
 
   var _category = Category();
@@ -193,7 +197,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         // ignore: deprecated_member_use
         leading: RaisedButton(
           onPressed: () => Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => HomeScreen())),
+              .push(MaterialPageRoute(builder: (context) => HomeScreen(userEmail: userEmail))),
           elevation: 0.0,
           child: Icon(
             Icons.arrow_back,

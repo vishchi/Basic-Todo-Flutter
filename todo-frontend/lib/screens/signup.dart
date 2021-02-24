@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/user_mutations.dart';
+import 'package:fluttertodolistsqfliteapp/screens/home_screen.dart';
 import 'package:fluttertodolistsqfliteapp/screens/login.dart';
-
+import 'package:fluttertodolistsqfliteapp/models/user.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -97,8 +100,21 @@ class _RegisterPageState extends State<RegisterPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
-            onPressed: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => LoginPage())),
+            onPressed: () async {
+              var userObject = User();
+              userObject.email = email;
+              userObject.password = password;
+              print("Email: " + email);
+              print("Password: "+ password);
+              var result = await insertUser(userObject);
+              if(!result.isEmpty) {
+                print("result: " + result.toString());
+                GQLClient.isToken = true;
+                GQLClient.token = result['token'];
+                Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => HomeScreen(userEmail: result['email'])));
+              }
+            },
             child: Text(
               "Register",
               style: TextStyle(

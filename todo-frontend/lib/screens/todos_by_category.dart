@@ -27,8 +27,8 @@ class _TodosByCategoryState extends State<TodosByCategory> {
       setState(() {
         var model = Todo();
         model.title = todo['title'];
+        model.category = todo['category']['name'];
         model.description = todo['description'];
-
         _todoList.add(model);
       });
     });

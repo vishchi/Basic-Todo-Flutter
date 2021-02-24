@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/client.dart';
+import 'package:fluttertodolistsqfliteapp/graphql/user_queries.dart';
+import 'package:fluttertodolistsqfliteapp/models/user.dart';
 import 'package:fluttertodolistsqfliteapp/screens/signup.dart';
 import 'package:fluttertodolistsqfliteapp/screens/home_screen.dart';
 
@@ -99,8 +102,21 @@ class _LoginPageState extends State<LoginPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0),
             ),
-            onPressed: () => Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => HomeScreen())),
+            onPressed: () async {
+              var userObject = User();
+              userObject.email = email;
+              userObject.password = password;
+              print("Email: " + email);
+              print("Password: "+ password);
+              var result = await loginUser(userObject);
+              if(!result.isEmpty) {
+                print("result: " + result.toString());
+                GQLClient.isToken = true;
+                GQLClient.token = result['token'];
+                Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => HomeScreen(userEmail: result['email'])));
+              }
+            },
             child: Text(
               "Login",
               style: TextStyle(
