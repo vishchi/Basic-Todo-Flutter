@@ -1,0 +1,35 @@
+type Query {
+	user(input: InsertUserInput!): SignInUser
+	todos: [Todo]
+	categories: [Category]
+	
+	todo(id: Int!): Todo
+	category(id: Int!): Category
+	
+	todosByCat(category: String!): [Todo]
+}
+
+type Users {
+	id: Int!
+	email: String!
+	password: String!
+}
+
+type SignInUser {
+	email: String!
+	token: String!
+}
+
+type Todo {
+	id: Int!
+	title: String!
+	description: String
+	userId: Int!
+	category: Category
+}
+
+type Category {
+	id: Int!
+	name: String!
+	userId: Int!
+}
