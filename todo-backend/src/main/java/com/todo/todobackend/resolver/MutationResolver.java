@@ -39,11 +39,13 @@ public class MutationResolver implements GraphQLMutationResolver {
 	public SignInUser insertUser(InsertUserInput input) {
 		System.out.println("Inserting User");
 		User user = userService.insertUser(input.getEmail(), passwordEncoder.encode(input.getPassword()));
+		System.out.println(user);
 		if(user == null) {
 			// TODO throw exception
 		}
 		String token = jwt.generateToken(user); 
 		SignInUser output = new SignInUser(user.getEmail(), token);
+//		System.out.println(output);
 		return output;
 	}
 
